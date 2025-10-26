@@ -1,0 +1,193 @@
+{% extends 'funding/base.html' %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">About BITE-PIPER</h1>
+        <p class="text-xl text-gray-600">
+            Socio-Economic Funding Allocation System
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Overview -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🎯 Overview</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                BITE-PIPER is a production-ready application that analyzes socio-economic data to generate well-founded recommendations and clear explanations for each decision.
+            </p>
+            <p class="text-gray-700 leading-relaxed">
+                Built on <strong>Minimal MeTTa</strong> principles, it provides a clean, maintainable architecture with automated funding allocation based on priority calculations.
+            </p>
+        </div>
+
+        <!-- Mission -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Mission</h2>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Generate well-founded recommendations</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Provide clear explanations for each decision</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Allocate funding based on priority calculations</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Maintain clean code architecture</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Minimize backend complexity</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- How Allocation Works -->
+        <div class="bg-white rounded-lg shadow-lg p-8 lg:col-span-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">⚙️ How Allocation Works</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-purple-600 mb-3">Step 1: Analyze Indicators</h3>
+                    <p class="text-gray-700 mb-3">The system evaluates 6 socio-economic indicators with weighted scoring:</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">Poverty Rate</p>
+                            <p class="text-sm text-gray-600">Weight: 25%</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">Household Income</p>
+                            <p class="text-sm text-gray-600">Weight: 15%</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">Wealth Index</p>
+                            <p class="text-sm text-gray-600">Weight: 20%</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">PPI Score</p>
+                            <p class="text-sm text-gray-600">Weight: 15%</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">Consumption</p>
+                            <p class="text-sm text-gray-600">Weight: 10%</p>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <p class="font-semibold">Literacy Rate</p>
+                            <p class="text-sm text-gray-600">Weight: 15%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-purple-600 mb-3">Step 2: Calculate Priority</h3>
+                    <p class="text-gray-700 mb-3">Based on the weighted score (0.0 - 1.0), regions are assigned priority levels:</p>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 bg-red-50 p-3 rounded">
+                            <span class="text-2xl">🔴</span>
+                            <div>
+                                <p class="font-semibold">CRITICAL</p>
+                                <p class="text-sm text-gray-600">Score ≥ 0.70 | 40% allocation weight</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-orange-50 p-3 rounded">
+                            <span class="text-2xl">🟠</span>
+                            <div>
+                                <p class="font-semibold">HIGH</p>
+                                <p class="text-sm text-gray-600">Score ≥ 0.50 | 30% allocation weight</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-yellow-50 p-3 rounded">
+                            <span class="text-2xl">🟡</span>
+                            <div>
+                                <p class="font-semibold">MEDIUM</p>
+                                <p class="text-sm text-gray-600">Score ≥ 0.30 | 20% allocation weight</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-green-50 p-3 rounded">
+                            <span class="text-2xl">🟢</span>
+                            <div>
+                                <p class="font-semibold">LOW</p>
+                                <p class="text-sm text-gray-600">Score < 0.30 | 10% allocation weight</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-purple-600 mb-3">Step 3: Allocate Funding</h3>
+                    <p class="text-gray-700 mb-3">Budget is distributed proportionally using MeTTa rules:</p>
+                    <div class="bg-blue-50 p-4 rounded font-mono text-sm">
+                        <p>weighted_score = priority_score × allocation_weight</p>
+                        <p>allocation_ratio = weighted_score / total_weighted_scores</p>
+                        <p>allocated_amount = total_budget × allocation_ratio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🛠️ Technology Stack</h2>
+            <ul class="space-y-3 text-gray-700">
+                <li><strong>Backend:</strong> Django 5.2</li>
+                <li><strong>Frontend:</strong> HTMX + Tailwind CSS</li>
+                <li><strong>Logic Engine:</strong> Minimal MeTTa</li>
+                <li><strong>Database:</strong> SQLite (configurable)</li>
+                <li><strong>Deployment:</strong> Production-ready</li>
+            </ul>
+        </div>
+
+        <!-- Key Features -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">✨ Key Features</h2>
+            <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                    <span class="text-purple-500 mr-2">•</span>
+                    <span><strong>MeTTa-Powered:</strong> Allocation weights as queryable facts</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-500 mr-2">•</span>
+                    <span><strong>Transparent:</strong> Complete calculation visibility</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-500 mr-2">•</span>
+                    <span><strong>Policy-Compliant:</strong> Follows governance standards</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-500 mr-2">•</span>
+                    <span><strong>Flexible:</strong> Customizable budgets and weights</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-purple-500 mr-2">•</span>
+                    <span><strong>Real-time:</strong> Instant HTMX updates</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Documentation Links -->
+    <div class="bg-white rounded-lg shadow-lg p-8 mt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">📚 Documentation</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-purple-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-lg mb-2">Complete Guide</h3>
+                <p class="text-gray-600 text-sm">FUNDING_ALLOCATION_GUIDE.md</p>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-lg mb-2">Architecture</h3>
+                <p class="text-gray-600 text-sm">ARCHITECTURE.md</p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+                <h3 class="font-semibold text-lg mb-2">Governance</h3>
+                <p class="text-gray-600 text-sm">GOVERNANCE.md</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

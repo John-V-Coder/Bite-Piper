@@ -1,3 +1,11 @@
+# Core dependencies for BITE-PIPER
 python-dotenv>=1.0.0  
 openai>=1.0.0 
 tiktoken>=0.7.0
+
+# MeTTa-Motto integration for advanced AI agents
+# Install with: pip install hyperon
+hyperon>=0.1.0
+
+# Optional: pandas for data import (CSV/Excel)
+pandas>=2.0.0

@@ -1,6 +1,6 @@
-# space.py - AtomSpace for Equality Rules
+# knowledge_base.py - AtomSpace for Equality Rules
 
-from atom import Symbol, Expression, NotReducible
+from metta_atoms import Symbol, Expression, NotReducible
 
 class AtomSpace:
     """A minimal AtomSpace to store and query equality facts (= ARG $body)."""

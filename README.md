@@ -1,17 +1,150 @@
-<<<<<<< HEAD
-# Bite-Piper: Socio-Economic Data Analysis System
+# Bite-Piper: Interactive Funding Allocation System
 
-## Overview
+## 🎯 Main Features
 
-Bite-Piper is a production-ready application that analyzes socio-economic data to generate well-founded recommendations and clear explanations for each decision. Built on **Minimal MeTTa** principles, it provides a clean, maintainable architecture with minimal backend complexity.
+### 1. **Advanced Logical Scoring** 🧠 (NEW!)
+**Sophisticated priority calculation** based on 6 socio-economic indicators with:
+- **5 Severity Levels**: EXTREME, SEVERE, MODERATE, LOW, MINIMAL
+- **Urgency Multipliers**: Recognizes compounding crises (×1.05 to ×1.20)
+- **Cross-Validation**: 3 consistency checks for data quality
+- **International Standards**: World Bank & UN poverty thresholds
+- **Detailed Breakdown**: See each indicator's contribution
 
-## Mission
+### 2. **Editable Priority Scores** ✏️ (CORE FEATURE)
+**Human-in-the-loop AI** - manually adjust scores and see real-time impact:
+- **Three Edit Methods**: Number input, sliders, quick action buttons
+- **Real-Time Updates**: Allocation recalculates automatically (500ms)
+- **Compare Modes**: Automated vs. custom allocations side-by-side
+- **Reset Function**: Return to calculated values anytime
+- **Full Transparency**: Original scores always visible
 
-Bite-Piper analyzes data across socio-economic dimensions to:
-- Generate well-founded recommendations
-- Provide clear explanations for each decision
-- Maintain clean code architecture
-- Minimize backend complexity
+---
+
+## 🚀 Quick Start (Web Interface)
+
+```bash
+cd src
+python manage.py runserver
+```
+
+Visit: **http://localhost:8000**
+
+### Using the Interface:
+
+1. **Enable Advanced Scoring** → Check "🧠 Advanced Scoring Mode" (enabled by default)
+2. **Enter Budget** → e.g., $1,000,000
+3. **Calculate** → Click "🚀 Calculate Allocation"
+4. **Review Analysis** → See automated priority scores with detailed breakdown
+5. **Edit Scores** (Optional) → Adjust using sliders or input fields
+6. **See Impact** → Allocation updates automatically in real-time
+7. **Export Results** → Download JSON or print report
+
+---
+
+## 📊 The 6 Socio-Economic Indicators
+
+| Indicator | Weight | What It Measures | Why It Matters |
+|-----------|--------|------------------|----------------|
+| **Poverty Rate** 🔴 | 25% | % below poverty line | Most direct poverty measure |
+| **Wealth Index** 🏠 | 20% | Asset ownership (0-100) | Shows accumulated disadvantage |
+| **Household Income** 💰 | 15% | Annual income/capita | Reflects purchasing power |
+| **PPI Score** 📈 | 15% | Poverty probability (%) | Predicts future poverty risk |
+| **Literacy Rate** 📚 | 15% | % can read/write | Education = pathway out of poverty |
+| **Consumption** 🛒 | 10% | Annual spending | Shows actual living standards |
+
+**Total**: 100% (weights validated by international poverty research)
+
+---
+
+## ✨ Key Features
+
+### 1. **Editable Priority Scores** 🎯 (MAIN FEATURE)
+- Adjust scores from 0.0 to 1.0
+- Use number inputs, sliders, or quick action buttons
+- Real-time allocation recalculation
+- Compare original vs. custom scores
+- Reset to calculated values anytime
+
+### 2. **Automated Calculation** 🤖
+- Analyzes 6 socio-economic indicators
+- Calculates weighted priority scores
+- Assigns priority levels (CRITICAL, HIGH, MEDIUM, LOW)
+- Provides transparent reasoning
+
+### 3. **MeTTa-Powered Allocation** 🧠
+- Uses Minimal MeTTa for rule-based decisions
+- Allocation weights as queryable facts
+- Symbolic reasoning engine
+- 100% policy-compliant
+
+### 4. **Modern Web Interface** 💻
+- Django + HTMX (minimal JavaScript)
+- Real-time updates without page reloads
+- Beautiful, responsive design
+- Mobile-friendly
+
+---
+
+## 📊 How It Works
+
+```
+User Adjusts Score (0.850 → 0.650)
+    ↓
+HTMX sends POST request
+    ↓
+Django recalculates allocation
+    ↓
+MeTTa applies allocation rules
+    ↓
+New allocation displayed
+    ↓
+User sees: RegionA $680K → $565K
+```
+
+**Result**: $115K shifts to other regions!
+
+---
+
+## 🎓 Use Cases
+
+### Policy Override
+```
+Automated: RegionA = 0.450 (MEDIUM)
+Disaster strikes!
+User adjusts: RegionA = 0.900 (CRITICAL)
+Allocation: 32% → 58% of budget
+```
+
+### Budget Balancing
+```
+Start: 68% | 22% | 10%
+Adjust scores to balance
+Result: 52% | 31% | 17%
+Fair distribution achieved!
+```
+
+### What-If Analysis
+```
+Scenario A: Poverty focus (automated)
+Scenario B: Education focus (custom)
+Compare allocations
+Present both to stakeholders
+```
+
+---
+
+## 📚 Documentation
+
+- **🎯 Editable Scores Guide**: [`EDITABLE_SCORES_GUIDE.md`](EDITABLE_SCORES_GUIDE.md) - Complete user guide
+- **💰 Allocation Guide**: [`FUNDING_ALLOCATION_GUIDE.md`](FUNDING_ALLOCATION_GUIDE.md) - Formulas & algorithms
+- **🔧 Django Integration**: [`DJANGO_HTMX_INTEGRATION.md`](DJANGO_HTMX_INTEGRATION.md) - Technical setup
+- **📖 Quick Summary**: [`FUNDING_ALLOCATION_SUMMARY.md`](FUNDING_ALLOCATION_SUMMARY.md) - Overview
+
+---
+
+## 🏗️ Architecture Overview
+
+Built on **Minimal MeTTa** principles with clean, maintainable architecture.
 
 ## Architecture
 
@@ -285,6 +418,3 @@ For questions or support, please refer to the project documentation or create an
 ---
 
 **Built with Minimal MeTTa principles for clarity, maintainability, and explainability.**
-=======
-# Bite-Piper
->>>>>>> 850783d1c17eef9ef1d49d56b813c0fafffe71ea

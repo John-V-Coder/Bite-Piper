@@ -1,0 +1,165 @@
+{% load humanize %}
+<div class="fade-in space-y-8">
+    <!-- Summary Cards -->
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg p-8 text-white" 
+         data-budget="{{ budget }}" 
+         data-total-allocated="{{ total_allocated }}" 
+         data-budget-utilization="{{ budget_utilization }}">
+        <h2 class="text-2xl font-bold mb-6">📊 Budget Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Total Budget</p>
+                <p class="text-3xl font-bold">${{ budget|floatformat:0|intcomma }}</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Total Allocated</p>
+                <p class="text-3xl font-bold">${{ total_allocated|floatformat:0|intcomma }}</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Budget Used</p>
+                <p class="text-3xl font-bold">{{ budget_utilization|floatformat:1 }}%</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Regions Analyzed</p>
+                <p class="text-3xl font-bold">{{ regions_analyzed }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Priority Analysis -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Priority Analysis</h2>
+        <div class="space-y-4">
+            {% for priority in priorities %}
+            <div class="border-l-4 {% if priority.priority == 'CRITICAL' %}border-red-500{% elif priority.priority == 'HIGH' %}border-orange-500{% elif priority.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        {% if priority.priority == 'CRITICAL' %}🔴{% elif priority.priority == 'HIGH' %}🟠{% elif priority.priority == 'MEDIUM' %}🟡{% else %}🟢{% endif %}
+                        {{ priority.region }}
+                    </h3>
+                    <span class="px-4 py-1 rounded-full text-sm font-semibold text-white {% if priority.priority == 'CRITICAL' %}bg-red-500{% elif priority.priority == 'HIGH' %}bg-orange-500{% elif priority.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %}">
+                        {{ priority.priority }}
+                    </span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Priority Score</p>
+                        <p class="text-2xl font-bold text-purple-600">{{ priority.score|floatformat:3 }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Analysis</p>
+                        <p class="text-gray-700">{{ priority.explanation }}</p>
+                    </div>
+                </div>
+
+                <!-- Indicators (collapsible) -->
+                <details class="mt-4">
+                    <summary class="cursor-pointer text-purple-600 hover:text-purple-700 font-medium">
+                        View Detailed Indicators →
+                    </summary>
+                    <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {% for indicator, value in priority.indicators.items %}
+                        <div class="bg-white p-3 rounded border border-gray-200">
+                            <p class="text-xs text-gray-600 mb-1">{{ indicator }}</p>
+                            <p class="font-semibold text-gray-800">{{ value }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </details>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Funding Allocation -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">💰 Funding Allocation</h2>
+        <div class="space-y-4">
+            {% for region, details in allocations.items %}
+            <div class="border-l-4 {% if details.priority == 'CRITICAL' %}border-red-500{% elif details.priority == 'HIGH' %}border-orange-500{% elif details.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        {% if details.priority == 'CRITICAL' %}🔴{% elif details.priority == 'HIGH' %}🟠{% elif details.priority == 'MEDIUM' %}🟡{% else %}🟢{% endif %}
+                        {{ region }}
+                    </h3>
+                    <span class="px-4 py-1 rounded-full text-sm font-semibold text-white {% if details.priority == 'CRITICAL' %}bg-red-500{% elif details.priority == 'HIGH' %}bg-orange-500{% elif details.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %}">
+                        {{ details.priority }}
+                    </span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Allocated Amount</p>
+                        <p class="text-2xl font-bold text-green-600">${{ details.amount|floatformat:2|intcomma }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Percentage</p>
+                        <p class="text-2xl font-bold text-blue-600">{{ details.percentage }}%</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">Priority Score</p>
+                        <p class="text-2xl font-bold text-purple-600">{{ details.score|floatformat:3 }}</p>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                    <div class="{% if details.priority == 'CRITICAL' %}bg-red-500{% elif details.priority == 'HIGH' %}bg-orange-500{% elif details.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %} h-3 rounded-full transition-all duration-500" data-percentage="{{ details.percentage }}"></div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded">
+                    <p class="text-sm text-gray-600 mb-1 font-medium">Justification:</p>
+                    <p class="text-gray-700">{{ details.explanation }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">📥 Export Results</h2>
+        <p class="text-gray-600 mb-4">Download allocation results for reporting and analysis</p>
+        <div class="flex space-x-4">
+            <button onclick="exportToJSON()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                📄 Export as JSON
+            </button>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                🖨️ Print Report
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set progress bar widths dynamically
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-percentage]').forEach(function(bar) {
+        bar.style.width = bar.getAttribute('data-percentage') + '%';
+    });
+});
+
+// Export functionality
+function exportToJSON() {
+    // Get data from page attributes
+    const budget = parseFloat(document.querySelector('[data-budget]')?.getAttribute('data-budget') || 0);
+    const totalAllocated = parseFloat(document.querySelector('[data-total-allocated]')?.getAttribute('data-total-allocated') || 0);
+    const budgetUtilization = parseFloat(document.querySelector('[data-budget-utilization]')?.getAttribute('data-budget-utilization') || 0);
+    
+    const data = {
+        budget: budget,
+        total_allocated: totalAllocated,
+        budget_utilization: budgetUtilization,
+        timestamp: new Date().toISOString()
+    };
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "allocation_results.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+</script>

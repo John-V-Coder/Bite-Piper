@@ -1,7 +1,7 @@
-# minimal_metta.py - Core Minimal MeTTa Instructions
+# metta_interpreter.py - Core Minimal MeTTa Instructions
 
-from atom import Symbol, Expression, Variable, NotReducible, Empty, TrueAtom, FalseAtom
-from space import AtomSpace
+from metta_atoms import Symbol, Expression, Variable, NotReducible, Empty, TrueAtom, FalseAtom
+from knowledge_base import AtomSpace
 
 class MeTTaInterpreter:
     """The engine for Minimal MeTTa instructions: eval, unify, chain."""

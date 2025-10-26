@@ -1,6 +1,6 @@
-# data_types.py - Parametric Types for Bite-Piper Data
+# socioeconomic_model.py - Parametric Types for Bite-Piper Socio-Economic Data
 
-from atom import Symbol, Expression
+from metta_atoms import Symbol, Expression
 
 # The 'Type' Symbol for Metta
 TypeSymbol = Symbol("Type")
@@ -65,3 +65,8 @@ ConsumptionExpenditure = Symbol("ConsumptionExpenditure")
 
 # --- EDUCATION INDICATORS ---
 LiteracyRate = Symbol("LiteracyRate")
+
+# --- QUERY AND DECISION SYMBOLS ---
+# Symbols used for querying and decision-making
+RegionData = Symbol("RegionData")
+FundingPriority = Symbol("FundingPriority")

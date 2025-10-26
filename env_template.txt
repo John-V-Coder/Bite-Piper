@@ -1,0 +1,90 @@
+# ============================================================================
+# BITE-PIPER AGENT ENVIRONMENT CONFIGURATION
+# ============================================================================
+# Copy this file to .env in the same directory and fill in your values
+# 
+# IMPORTANT: Never commit .env file to version control!
+# ============================================================================
+
+# ============================================================================
+# AGENT CONFIGURATION
+# ============================================================================
+
+# Agent Name (unique identifier for your agent)
+AGENT_NAME=bite-piper-agent
+
+# Agent Seed Phrase (keep this secret! Used to generate agent address)
+AGENT_SEED=bite_piper_civic_decision_seed_phrase_2025
+
+# Agent Port (default: 8000)
+AGENT_PORT=8000
+
+# Agent Endpoint (where the agent receives messages)
+AGENT_ENDPOINT=http://localhost:8000/submit
+
+
+# ============================================================================
+# ASI (Artificial Superintelligence) CONFIGURATION
+# ============================================================================
+
+# ASI API Key (get from https://asi1.ai)
+# If not provided, agent will work without ASI enhancement
+ASI_API_KEY=your_asi_api_key_here
+
+# ASI Base URL (default ASI endpoint)
+ASI_BASE_URL=https://api.asi1.ai/v1
+
+# ASI Model to use
+ASI_MODEL=asi1-graph
+
+
+# ============================================================================
+# CIVIC DATA API KEYS
+# ============================================================================
+
+# World Bank API Key (optional - World Bank API is mostly public)
+# Get from: https://datahelpdesk.worldbank.org/knowledgebase/articles/889386
+WORLDBANK_API_KEY=
+
+# US Census Bureau API Key (required for US data)
+# Get from: https://api.census.gov/data/key_signup.html
+CENSUS_API_KEY=your_census_api_key_here
+
+
+# ============================================================================
+# DJANGO FRONTEND CONFIGURATION (for agent integration)
+# ============================================================================
+
+# Agent Address (generated after first run - copy from agent startup)
+AGENT_ADDRESS=agent1q2xj7w8...
+
+# Agent Timeout for requests (seconds)
+AGENT_TIMEOUT=30
+
+
+# ============================================================================
+# OPTIONAL: DATABASE CONFIGURATION (for persistent storage)
+# ============================================================================
+
+# DATABASE_URL=postgresql://user:password@localhost:5432/bitepiper
+
+
+# ============================================================================
+# DEPLOYMENT NOTES
+# ============================================================================
+# 
+# 1. AGENT ADDRESS:
+#    Your agent's address will be generated from the AGENT_SEED
+#    Keep the seed phrase secure!
+#
+# 2. AGENT ENDPOINT:
+#    For local development: http://localhost:8000/submit
+#    For production: Update to your public endpoint
+#
+# 3. TO RUN THE AGENT:
+#    python src/agent/uagent/main_agent.py
+#
+# 4. TO TEST THE AGENT:
+#    Use the test client in test_agent_client.py
+#
+# ============================================================================

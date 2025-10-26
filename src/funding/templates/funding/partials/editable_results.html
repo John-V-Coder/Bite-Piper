@@ -1,0 +1,224 @@
+{% load humanize %}
+<div class="fade-in space-y-8">
+    <!-- Summary Cards -->
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg shadow-lg p-8 text-white" 
+         data-budget="{{ budget }}" 
+         data-total-allocated="{{ total_allocated }}" 
+         data-budget-utilization="{{ budget_utilization }}">
+        <h2 class="text-2xl font-bold mb-6">📊 Budget Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Total Budget</p>
+                <p class="text-3xl font-bold">${{ budget|floatformat:0|intcomma }}</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Total Allocated</p>
+                <p class="text-3xl font-bold">${{ total_allocated|floatformat:0|intcomma }}</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Budget Used</p>
+                <p class="text-3xl font-bold">{{ budget_utilization|floatformat:1 }}%</p>
+            </div>
+            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+                <p class="text-sm opacity-90 mb-1">Regions Analyzed</p>
+                <p class="text-3xl font-bold">{{ regions_analyzed }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editable Priority Scores -->
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">✏️ Edit Priority Scores</h2>
+                <p class="text-gray-600 mt-1">Adjust scores to see how allocation changes</p>
+            </div>
+            <button 
+                hx-post="{% url 'funding:calculate' %}"
+                hx-target="#results"
+                hx-include="[name='budget']"
+                class="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition-colors">
+                🔄 Reset to Calculated
+            </button>
+        </div>
+
+        <form 
+            hx-post="{% url 'funding:recalculate_custom' %}"
+            hx-target="#allocation-display"
+            hx-trigger="change delay:500ms"
+            class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="budget" value="{{ budget }}">
+
+            {% for priority in priorities %}
+            <div class="border-l-4 {% if priority.priority == 'CRITICAL' %}border-red-500{% elif priority.priority == 'HIGH' %}border-orange-500{% elif priority.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <!-- Region Name & Original Score -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                            {% if priority.priority == 'CRITICAL' %}🔴{% elif priority.priority == 'HIGH' %}🟠{% elif priority.priority == 'MEDIUM' %}🟡{% else %}🟢{% endif %}
+                            {{ priority.region }}
+                        </h3>
+                        <p class="text-sm text-gray-600">
+                            Original Score: <span class="font-semibold text-purple-600">{{ priority.score|floatformat:3 }}</span>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                            Auto Priority: <span class="px-2 py-1 rounded text-xs font-semibold {% if priority.priority == 'CRITICAL' %}bg-red-100 text-red-800{% elif priority.priority == 'HIGH' %}bg-orange-100 text-orange-800{% elif priority.priority == 'MEDIUM' %}bg-yellow-100 text-yellow-800{% else %}bg-green-100 text-green-800{% endif %}">{{ priority.priority }}</span>
+                        </p>
+                    </div>
+
+                    <!-- Editable Score Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Custom Score (0.0 - 1.0)
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="number" 
+                                name="score_{{ priority.region }}"
+                                value="{{ priority.score|floatformat:3 }}"
+                                min="0.0"
+                                max="1.0"
+                                step="0.001"
+                                class="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg font-semibold text-center"
+                                required>
+                        </div>
+                        <!-- Score Slider -->
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            value="{{ priority.score }}"
+                            oninput="this.previousElementSibling.querySelector('input').value = parseFloat(this.value).toFixed(3); this.form.dispatchEvent(new Event('change', { bubbles: true }));"
+                            class="w-full mt-2 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="flex flex-col gap-2">
+                        <button 
+                            type="button"
+                            onclick="this.closest('.border-l-4').querySelector('input[type=number]').value = '1.000'; this.closest('.border-l-4').querySelector('input[type=range]').value = '1.000'; this.form.dispatchEvent(new Event('change', { bubbles: true }));"
+                            class="bg-red-500 text-white px-3 py-2 rounded text-sm font-semibold hover:bg-red-600 transition-colors">
+                            Set CRITICAL (1.0)
+                        </button>
+                        <button 
+                            type="button"
+                            onclick="this.closest('.border-l-4').querySelector('input[type=number]').value = '0.600'; this.closest('.border-l-4').querySelector('input[type=range]').value = '0.600'; this.form.dispatchEvent(new Event('change', { bubbles: true }));"
+                            class="bg-orange-500 text-white px-3 py-2 rounded text-sm font-semibold hover:bg-orange-600 transition-colors">
+                            Set HIGH (0.6)
+                        </button>
+                        <button 
+                            type="button"
+                            onclick="this.closest('.border-l-4').querySelector('input[type=number]').value = '0.400'; this.closest('.border-l-4').querySelector('input[type=range]').value = '0.400'; this.form.dispatchEvent(new Event('change', { bubbles: true }));"
+                            class="bg-yellow-500 text-white px-3 py-2 rounded text-sm font-semibold hover:bg-yellow-600 transition-colors">
+                            Set MEDIUM (0.4)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Reasoning -->
+                <div class="mt-4 bg-blue-50 p-3 rounded">
+                    <p class="text-sm text-gray-700"><strong>Calculated Based On:</strong> {{ priority.explanation }}</p>
+                    
+                    {% if priority.methodology %}
+                    <p class="text-xs text-gray-600 mt-2"><em>Method: {{ priority.methodology }}</em></p>
+                    {% endif %}
+                    
+                    {% if priority.urgency %}
+                    <div class="mt-2 p-2 bg-orange-50 rounded border-l-2 border-orange-400">
+                        <p class="text-xs font-semibold text-orange-800">⚡ Urgency Factor: {{ priority.urgency.multiplier }}x</p>
+                        <p class="text-xs text-orange-700">{{ priority.urgency.reason }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if priority.warnings %}
+                    <div class="mt-2 p-2 bg-yellow-50 rounded border-l-2 border-yellow-400">
+                        <p class="text-xs font-semibold text-yellow-800">⚠️ Data Consistency Warnings:</p>
+                        <ul class="text-xs text-yellow-700 mt-1 list-disc list-inside">
+                            {% for warning in priority.warnings %}
+                            <li>{{ warning }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Advanced Indicator Breakdown (Collapsible) -->
+                {% if priority.indicator_breakdown %}
+                <details class="mt-3">
+                    <summary class="cursor-pointer text-sm font-medium text-purple-600 hover:text-purple-700">
+                        🔍 View Detailed Indicator Analysis →
+                    </summary>
+                    <div class="mt-3 space-y-2 bg-gray-50 p-3 rounded">
+                        {% for indicator, details in priority.indicator_breakdown.items %}
+                        <div class="text-xs border-l-2 pl-2 {% if details.severity == 'EXTREME' %}border-red-500{% elif details.severity == 'SEVERE' %}border-orange-500{% elif details.severity == 'MODERATE' %}border-yellow-500{% else %}border-green-500{% endif %}">
+                            <p class="font-semibold">{{ indicator }}: {{ details.value }}</p>
+                            <p class="text-gray-600">{{ details.explanation }}</p>
+                            <div class="flex gap-3 mt-1 text-gray-500">
+                                <span>Severity: <strong>{{ details.severity }}</strong></span>
+                                <span>Score: <strong>{{ details.normalized_score|floatformat:2 }}</strong></span>
+                                <span>Weight: <strong>{{ details.weight|floatformat:2 }}</strong></span>
+                                <span>Contribution: <strong>{{ details.contribution|floatformat:3 }}</strong></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </details>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                <p class="text-sm text-yellow-800">
+                    💡 <strong>Tip:</strong> Adjust scores using the input fields or sliders. Allocation updates automatically.
+                    Use quick action buttons for preset values.
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Live Allocation Display -->
+    <div id="allocation-display">
+        {% include 'funding/partials/allocation_display.html' %}
+    </div>
+</div>
+
+<script>
+// Set progress bar widths dynamically
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-percentage]').forEach(function(bar) {
+        bar.style.width = bar.getAttribute('data-percentage') + '%';
+    });
+});
+
+// Sync number input with range slider
+document.querySelectorAll('input[type="range"]').forEach(function(slider) {
+    const numberInput = slider.previousElementSibling.querySelector('input[type="number"]');
+    slider.addEventListener('input', function() {
+        numberInput.value = parseFloat(this.value).toFixed(3);
+    });
+});
+
+// Export functionality
+function exportToJSON() {
+    const budget = parseFloat(document.querySelector('[data-budget]')?.getAttribute('data-budget') || 0);
+    const totalAllocated = parseFloat(document.querySelector('[data-total-allocated]')?.getAttribute('data-total-allocated') || 0);
+    const budgetUtilization = parseFloat(document.querySelector('[data-budget-utilization]')?.getAttribute('data-budget-utilization') || 0);
+    
+    const data = {
+        budget: budget,
+        total_allocated: totalAllocated,
+        budget_utilization: budgetUtilization,
+        timestamp: new Date().toISOString()
+    };
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "allocation_results.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+</script>

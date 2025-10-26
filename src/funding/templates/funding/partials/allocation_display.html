@@ -1,0 +1,79 @@
+{% load humanize %}
+<!-- Funding Allocation Display -->
+<div class="bg-white rounded-lg shadow-lg p-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">💰 Funding Allocation {% if is_custom %}<span class="text-purple-600">(Custom Scores)</span>{% endif %}</h2>
+    
+    {% if is_custom %}
+    <div class="bg-purple-50 border-l-4 border-purple-400 p-4 rounded mb-6">
+        <p class="text-sm text-purple-800">
+            ✨ <strong>Custom Allocation:</strong> Using your manually adjusted priority scores.
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="space-y-4">
+        {% for region, details in allocations.items %}
+        <div class="border-l-4 {% if details.priority == 'CRITICAL' %}border-red-500{% elif details.priority == 'HIGH' %}border-orange-500{% elif details.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">
+                    {% if details.priority == 'CRITICAL' %}🔴{% elif details.priority == 'HIGH' %}🟠{% elif details.priority == 'MEDIUM' %}🟡{% else %}🟢{% endif %}
+                    {{ region }}
+                </h3>
+                <span class="px-4 py-1 rounded-full text-sm font-semibold text-white {% if details.priority == 'CRITICAL' %}bg-red-500{% elif details.priority == 'HIGH' %}bg-orange-500{% elif details.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %}">
+                    {{ details.priority }}
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Allocated Amount</p>
+                    <p class="text-2xl font-bold text-green-600">${{ details.amount|floatformat:2|intcomma }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Percentage</p>
+                    <p class="text-2xl font-bold text-blue-600">{{ details.percentage }}%</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Priority Score</p>
+                    <p class="text-2xl font-bold text-purple-600">{{ details.score|floatformat:3 }}</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                <div class="{% if details.priority == 'CRITICAL' %}bg-red-500{% elif details.priority == 'HIGH' %}bg-orange-500{% elif details.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %} h-3 rounded-full transition-all duration-500" data-percentage="{{ details.percentage }}"></div>
+            </div>
+
+            {% if details.explanation %}
+            <div class="bg-blue-50 p-4 rounded">
+                <p class="text-sm text-gray-600 mb-1 font-medium">Justification:</p>
+                <p class="text-gray-700">{{ details.explanation }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Export Options -->
+    <div class="mt-6 flex justify-between items-center">
+        <div class="text-sm text-gray-600">
+            <p>Total Allocated: <span class="font-semibold text-green-600">${{ total_allocated|floatformat:2|intcomma }}</span></p>
+            <p>Budget Utilization: <span class="font-semibold text-blue-600">{{ budget_utilization|floatformat:1 }}%</span></p>
+        </div>
+        <div class="flex space-x-4">
+            <button onclick="exportToJSON()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                📄 Export as JSON
+            </button>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                🖨️ Print Report
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set progress bar widths
+document.querySelectorAll('[data-percentage]').forEach(function(bar) {
+    bar.style.width = bar.getAttribute('data-percentage') + '%';
+});
+</script>
