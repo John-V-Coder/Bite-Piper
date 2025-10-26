@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Socio-Economic Supply Chain Data with Recursive Hierarchies",
+    "timestamp": "2025-10-25T00:00:00Z",
+    "data_type": "SupplyChainHierarchy",
+    "indicators": ["household_income_per_capita", "poverty_rate", "wealth_index", "ppi_score", "consumption_expenditure", "literacy_rate"]
+  },
+  "supply_chain": {
+    "node_id": "region_001",
+    "node_type": "region",
+    "name": "Northern Region",
+    "income_per_capita": 1500,
+    "poverty_rate": 60,
+    "wealth_index": 25,
+    "ppi_score": 75,
+    "consumption_expenditure": 1200,
+    "literacy_rate": 45,
+    "resources_available": {"food_aid_tons": 500, "medical_supplies_units": 200, "educational_materials_units": 150},
+    "resources_needed": {"food_aid_tons": 1500, "medical_supplies_units": 800, "educational_materials_units": 600},
+    "priority": "CRITICAL",
+    "decision_path": ["initial_assessment", "priority_critical"],
+    "children": [
+      {
+        "node_id": "district_001_a",
+        "node_type": "district",
+        "name": "Mountain District",
+        "income_per_capita": 1200,
+        "poverty_rate": 72,
+        "wealth_index": 18,
+        "ppi_score": 82,
+        "consumption_expenditure": 950,
+        "literacy_rate": 38,
+        "resources_available": {"food_aid_tons": 150, "medical_supplies_units": 50},
+        "resources_needed": {"food_aid_tons": 600, "medical_supplies_units": 300},
+        "priority": "CRITICAL",
+        "children": [
+          {
+            "node_id": "community_001_a_1",
+            "node_type": "community",
+            "name": "Highland Village A",
+            "income_per_capita": 900,
+            "poverty_rate": 85,
+            "wealth_index": 12,
+            "ppi_score": 90,
+            "consumption_expenditure": 750,
+            "literacy_rate": 25,
+            "resources_available": {"food_aid_tons": 30},
+            "resources_needed": {"food_aid_tons": 200},
+            "priority": "CRITICAL"
+          }
+        ]
+      },
+      {
+        "node_id": "district_001_b",
+        "node_type": "district",
+        "name": "Valley District",
+        "income_per_capita": 1800,
+        "poverty_rate": 52,
+        "wealth_index": 32,
+        "ppi_score": 65,
+        "consumption_expenditure": 1450,
+        "literacy_rate": 55,
+        "resources_available": {"food_aid_tons": 250},
+        "resources_needed": {"food_aid_tons": 650},
+        "priority": "HIGH",
+        "children": [
+          {
+            "node_id": "community_001_b_1",
+            "node_type": "community",
+            "name": "Valley Town A",
+            "income_per_capita": 2200,
+            "poverty_rate": 42,
+            "wealth_index": 40,
+            "ppi_score": 55,
+            "consumption_expenditure": 1800,
+            "literacy_rate": 65,
+            "resources_available": {"food_aid_tons": 120},
+            "resources_needed": {"food_aid_tons": 280},
+            "priority": "MEDIUM"
+          }
+        ]
+      }
+    ]
+  },
+  "decision_tree": {
+    "decision_id": "root_decision",
+    "decision_type": "FundAllocation",
+    "condition": "poverty_rate > 50 AND wealth_index < 30",
+    "action": "Allocate_Critical_Funding",
+    "confidence": 0.95,
+    "explanation": "Critical funding required based on multiple poverty indicators",
+    "input_type": "SocioEconomicData",
+    "output_type": "PriorityRecommendation",
+    "children": [
+      {
+        "decision_id": "high_priority_decision",
+        "decision_type": "ResourceDistribution",
+        "condition": "poverty_rate > 40 AND poverty_rate <= 50",
+        "action": "Allocate_High_Priority_Resources",
+        "confidence": 0.85,
+        "explanation": "High priority resources needed",
+        "input_type": "SocioEconomicData",
+        "output_type": "ResourceAllocation"
+      }
+    ]
+  },
+  "error_traces": [
+    {
+      "error_id": "err_001",
+      "error_type": "DataMissing",
+      "location": "community_001_a_1",
+      "message": "Water purification data missing",
+      "timestamp": "2025-10-24T15:30:00Z",
+      "context": {"node_id": "community_001_a_1", "indicator": "water_systems"},
+      "recovery_action": "Use district average"
+    }
+  ],
+  "explainable_atoms": [
+    {
+      "atom_id": "atom_001",
+      "atom_type": "fact",
+      "content": "(Poverty NorthernRegion 60)",
+      "confidence": 1.0,
+      "source": "census_data_2025",
+      "dependencies": [],
+      "explanation": "Northern Region has 60% poverty rate from census"
+    },
+    {
+      "atom_id": "atom_002",
+      "atom_type": "rule",
+      "content": "(Priority NorthernRegion CRITICAL)",
+      "confidence": 0.9,
+      "source": "decision_function",
+      "dependencies": ["atom_001"],
+      "explanation": "Critical priority assigned due to high poverty rate"
+    },
+    {
+      "atom_id": "atom_003",
+      "atom_type": "inference",
+      "content": "(Recommend NorthernRegion FundingIntervention)",
+      "confidence": 0.85,
+      "source": "inference_engine",
+      "dependencies": ["atom_002"],
+      "explanation": "Funding intervention recommended with 85% confidence"
+    }
+  ]
+}
