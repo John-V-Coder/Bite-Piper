@@ -1,25 +1,32 @@
+{% load humanize funding_extras %}
+
 <!-- Agent Analysis Results Partial -->
 <div class="mt-8 fade-in">
     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-t-lg p-6">
         <h2 class="text-3xl font-bold flex items-center">
-            <span class="mr-3">🤖</span>
+            <span class="mr-3"></span>
             AI Agent Analysis
         </h2>
         <p class="text-purple-100 mt-2">
-            Comprehensive ethical, fairness, and transparency analysis powered by ASI
+            Comprehensive ethical, fairness, and transparency analysis powered by ASI.
         </p>
     </div>
 
     <div class="bg-white rounded-b-lg shadow-lg p-6">
         {% if agent_results %}
+            <!-- Analysis Graph -->
+            <div class="mb-8 border-2 border-purple-200 rounded-lg p-6">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Analysis Graph</h3>
+                <div id="analysis-graph" class="w-full h-[500px] border rounded-lg"></div>
+            </div>
+
             <!-- Agent Analysis by Region -->
             <div class="space-y-6">
                 {% for region_name, analysis in agent_results.items %}
                     <div class="border-2 border-purple-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                        <!-- Region Header -->
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-2xl font-bold text-gray-800">
-                                {{ region_name }}
-                            </h3>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ region_name }}</h3>
                             <div class="text-right">
                                 <div class="text-sm text-gray-600">Allocated</div>
                                 <div class="text-2xl font-bold text-purple-600">
@@ -29,109 +36,31 @@
                         </div>
 
                         {% if analysis.error %}
-                            <!-- Error State -->
                             <div class="bg-red-50 border border-red-200 rounded-lg p-4">
                                 <p class="text-red-700">❌ {{ analysis.error }}</p>
                             </div>
                         {% else %}
                             <!-- Analysis Modules -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <!-- Fairness Analysis -->
-                                {% if analysis.fairness %}
-                                <div class="bg-blue-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-blue-900 mb-2 flex items-center">
-                                        <span class="mr-2">⚖️</span>
-                                        Fairness Assessment
-                                    </h4>
-                                    <div class="text-sm text-blue-800">
-                                        <p><strong>Score:</strong> {{ analysis.fairness.score|floatformat:2 }}/10</p>
-                                        <p class="mt-1">{{ analysis.fairness.assessment }}</p>
+                                {% for module, data in analysis.items %}
+                                    {% if module != 'recommendations' and module != 'error' %}
+                                    <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-400">
+                                        <h4 class="font-semibold text-gray-900 mb-2 capitalize">{{ module|underscore_to_space }}</h4>
+                                        <div class="text-sm text-gray-700">
+                                            {% for key, value in data.items %}
+                                                <p><strong>{{ key|title }}:</strong> {{ value }}</p>
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                </div>
-                                {% endif %}
-
-                                <!-- Justice Evaluation -->
-                                {% if analysis.justice %}
-                                <div class="bg-green-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-green-900 mb-2 flex items-center">
-                                        <span class="mr-2">⚖️</span>
-                                        Justice Evaluation
-                                    </h4>
-                                    <div class="text-sm text-green-800">
-                                        <p><strong>Framework:</strong> {{ analysis.justice.framework }}</p>
-                                        <p class="mt-1">{{ analysis.justice.evaluation }}</p>
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <!-- Equity Analysis -->
-                                {% if analysis.equity %}
-                                <div class="bg-yellow-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-yellow-900 mb-2 flex items-center">
-                                        <span class="mr-2">📊</span>
-                                        Equity Analysis
-                                    </h4>
-                                    <div class="text-sm text-yellow-800">
-                                        <p><strong>Status:</strong> {{ analysis.equity.status }}</p>
-                                        <p class="mt-1">{{ analysis.equity.recommendation }}</p>
-                                    </div>
-                                </div>
-                                {% endif %}
-
-                                <!-- Transparency Report -->
-                                {% if analysis.transparency %}
-                                <div class="bg-purple-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-purple-900 mb-2 flex items-center">
-                                        <span class="mr-2">🔍</span>
-                                        Transparency
-                                    </h4>
-                                    <div class="text-sm text-purple-800">
-                                        <p><strong>Clarity:</strong> {{ analysis.transparency.clarity_score|floatformat:2 }}/10</p>
-                                        <p class="mt-1">{{ analysis.transparency.explanation }}</p>
-                                    </div>
-                                </div>
-                                {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-
-                            <!-- Impact Assessment -->
-                            {% if analysis.impact %}
-                            <div class="mt-4 bg-gray-50 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-2 flex items-center">
-                                    <span class="mr-2">💥</span>
-                                    Impact Assessment
-                                </h4>
-                                <div class="text-sm text-gray-700 space-y-1">
-                                    <p><strong>Direct Impact:</strong> {{ analysis.impact.direct_beneficiaries|intcomma }} people</p>
-                                    <p><strong>Indirect Impact:</strong> {{ analysis.impact.indirect_beneficiaries|intcomma }} people</p>
-                                    <p><strong>Timeframe:</strong> {{ analysis.impact.timeframe }}</p>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                            <!-- Systemic Bias Detection -->
-                            {% if analysis.bias_check %}
-                            <div class="mt-4 {% if analysis.bias_check.issues %}bg-red-50{% else %}bg-green-50{% endif %} rounded-lg p-4">
-                                <h4 class="font-semibold {% if analysis.bias_check.issues %}text-red-900{% else %}text-green-900{% endif %} mb-2 flex items-center">
-                                    <span class="mr-2">🔎</span>
-                                    Bias Detection
-                                </h4>
-                                {% if analysis.bias_check.issues %}
-                                    <ul class="text-sm {% if analysis.bias_check.issues %}text-red-800{% else %}text-green-800{% endif %} list-disc list-inside">
-                                        {% for issue in analysis.bias_check.issues %}
-                                            <li>{{ issue }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <p class="text-sm text-green-800">✓ No systemic biases detected</p>
-                                {% endif %}
-                            </div>
-                            {% endif %}
 
                             <!-- Recommendations -->
                             {% if analysis.recommendations %}
                             <div class="mt-4 bg-indigo-50 rounded-lg p-4">
                                 <h4 class="font-semibold text-indigo-900 mb-2 flex items-center">
-                                    <span class="mr-2">💡</span>
+                                    <span class="mr-2"></span>
                                     Agent Recommendations
                                 </h4>
                                 <ul class="text-sm text-indigo-800 list-disc list-inside space-y-1">
@@ -145,31 +74,92 @@
                     </div>
                 {% endfor %}
             </div>
-
-            <!-- Overall Agent Summary -->
-            <div class="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 border-2 border-purple-200">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Overall Agent Assessment</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-3xl font-bold text-purple-600">{{ agent_results|length }}</div>
-                        <div class="text-sm text-gray-600">Regions Analyzed</div>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-3xl font-bold text-blue-600">${{ budget|floatformat:0|intcomma }}</div>
-                        <div class="text-sm text-gray-600">Total Budget</div>
-                    </div>
-                    <div class="bg-white rounded-lg p-4 text-center">
-                        <div class="text-3xl font-bold text-green-600">ASI-Powered</div>
-                        <div class="text-sm text-gray-600">8 Analysis Modules</div>
-                    </div>
-                </div>
-            </div>
         {% else %}
-            <!-- No Results -->
             <div class="text-center py-8 text-gray-500">
-                <p class="text-lg">No agent analysis available</p>
-                <p class="text-sm mt-2">Click "Analyze with AI Agent" to get comprehensive insights</p>
+                <p class="text-lg">No agent analysis available.</p>
+                <p class="text-sm mt-2">Click "Analyze with AI Agent" to get comprehensive insights.</p>
             </div>
         {% endif %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const agentData = {{ agent_results_json|safe }};
+        if (!agentData) return;
+
+        const nodes = [];
+        const edges = [];
+        let nodeId = 1;
+
+        // Central node
+        const centralNodeId = nodeId++;
+        nodes.push({ id: centralNodeId, label: 'Funding Decision', group: 'decision', shape: 'star', color: '#ffc107' });
+
+        for (const [regionName, analysis] of Object.entries(agentData)) {
+            const regionNodeId = nodeId++;
+            nodes.push({ id: regionNodeId, label: regionName, group: 'region' });
+            edges.push({ from: centralNodeId, to: regionNodeId });
+
+            if (analysis.error) continue;
+
+            for (const [moduleName, moduleData] of Object.entries(analysis)) {
+                if (moduleName === 'recommendations') continue;
+
+                const moduleNodeId = nodeId++;
+                nodes.push({ id: moduleNodeId, label: moduleName.replace('_', ' ').toTitleCase(), group: 'module' });
+                edges.push({ from: regionNodeId, to: moduleNodeId });
+            }
+
+            if (analysis.recommendations) {
+                for (const rec of analysis.recommendations) {
+                    const recNodeId = nodeId++;
+                    nodes.push({ id: recNodeId, label: rec, group: 'recommendation', shape: 'box' });
+                    edges.push({ from: regionNodeId, to: recNodeId });
+                }
+            }
+        }
+
+        const container = document.getElementById('analysis-graph');
+        const data = { nodes: nodes, edges: edges };
+        const options = {
+            nodes: {
+                shape: 'dot',
+                size: 16,
+                font: { size: 14, color: '#333' },
+                borderWidth: 2,
+            },
+            edges: {
+                width: 2,
+                arrows: 'to',
+            },
+            layout: {
+                hierarchical: {
+                    enabled: true,
+                    levelSeparation: 200,
+                    nodeSpacing: 150,
+                    treeSpacing: 250,
+                    direction: 'UD',
+                    sortMethod: 'directed',
+                },
+            },
+            physics: {
+                hierarchicalRepulsion: {
+                    nodeDistance: 150,
+                },
+            },
+            groups: {
+                decision: { color: { background: '#ffc107', border: '#ff9800' }, shape: 'star' },
+                region: { color: { background: '#8bc34a', border: '#689f38' } },
+                module: { color: { background: '#2196f3', border: '#1976d2' } },
+                recommendation: { color: { background: '#9c27b0', border: '#7b1fa2' }, shape: 'box' },
+            },
+        };
+
+        new vis.Network(container, data, options);
+    });
+
+    String.prototype.toTitleCase = function() {
+        return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+</script>

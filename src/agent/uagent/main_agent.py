@@ -401,7 +401,7 @@ async def handle_health_check(ctx: Context, sender: str, msg: HealthCheckRequest
 
 
 # Main decision analysis endpoint
-@agent.on_query(model=DecisionRequest, replies={DecisionResponse})
+@agent.on_query(model=DecisionRequest, replies=DecisionResponse)
 async def handle_decision_request(ctx: Context, sender: str, msg: DecisionRequest):
     ctx.logger.info(f"📥 Received decision request: {msg.decision_id} from {sender}")
     ctx.logger.info(f"   Type: {msg.decision_type}")

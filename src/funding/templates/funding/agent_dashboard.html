@@ -1,285 +1,143 @@
 {% extends 'funding/base.html' %}
 
+{% block title %}AI Agent Dashboard{% endblock %}
+
 {% block content %}
 <div class="fade-in">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-lg p-8 mb-8">
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-2xl p-8 mb-8">
         <h1 class="text-4xl font-bold mb-2 flex items-center">
-            <span class="mr-3">🤖</span>
+            <span class="mr-4"></span>
             AI Agent Dashboard
         </h1>
         <p class="text-purple-100 text-lg">
-            Monitor and interact with the Bite-Piper civic decision-making agent
+            Monitor and interact with the Bite-Piper civic decision-making agent.
         </p>
     </div>
 
-    <!-- Agent Status -->
-    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">📡 Agent Status</h2>
-        
-        <div 
-            hx-get="{% url 'funding:agent_health' %}"
-            hx-trigger="load, every 10s"
-            hx-swap="innerHTML"
-        >
-            <!-- Agent status will load here -->
-            <div class="flex items-center justify-center py-8">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-                <span class="ml-3 text-gray-600">Checking agent status...</span>
-            </div>
-        </div>
+    <!-- Main Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        {% if health.status == 'healthy' %}
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <span class="text-3xl">✅</span>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-700">Status</div>
-                        <div class="text-xl font-bold text-green-600">{{ health.status|title }}</div>
+        <!-- Left Column -->
+        <div class="lg:col-span-1 space-y-8">
+            
+            <!-- Agent Status Card -->
+            <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                        <span class="mr-3 text-3xl"></span>
+                        Agent Status
+                    </h2>
+                </div>
+                <div 
+                    class="p-6"
+                    hx-get="{% url 'funding:agent_health' %}"
+                    hx-trigger="load, every 10s"
+                    hx-swap="innerHTML"
+                >
+                    <!-- Agent status will load here -->
+                    <div class="flex items-center justify-center py-8">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                        <span class="ml-4 text-gray-600">Connecting to agent...</span>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <span class="text-3xl">🏛️</span>
+            <!-- Quick Actions Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-2xl transition-shadow duration-300">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4 flex items-center">
+                    <span class="mr-3 text-3xl"></span>
+                    Quick Actions
+                </h2>
+                <div class="space-y-4">
+                    <a href="{% url 'funding:index' %}" class="block w-full text-left bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg p-4 hover:shadow-xl transition-shadow">
+                        <div class="font-semibold text-lg">Funding Dashboard</div>
+                        <div class="text-sm text-purple-100 mt-1">Calculate & analyze allocations</div>
+                    </a>
+                    <button 
+                        onclick="window.location.reload()"
+                        class="w-full text-left bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg p-4 hover:shadow-xl transition-shadow"
+                    >
+                        <div class="font-semibold text-lg">Refresh Page</div>
+                        <div class="text-sm text-green-100 mt-1">Force a full refresh</div>
+                    </button>
+                    <a href="{% url 'funding:about' %}" class="block w-full text-left bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg p-4 hover:shadow-xl transition-shadow">
+                        <div class="font-semibold text-lg">About System</div>
+                        <div class="text-sm text-blue-100 mt-1">Learn more about BITE-PIPER</div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column -->
+        <div class="lg:col-span-2">
+
+            <!-- Agent Capabilities Card -->
+            <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                        <span class="mr-3 text-3xl">🎯</span>
+                        Agent Capabilities
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Fairness Analysis -->
+                        <div class="border-l-4 border-purple-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Fairness Analysis</h3>
+                            <p class="text-gray-600 mt-1">Evaluates allocation fairness using distributive justice principles.</p>
+                        </div>
+                        <!-- Justice Evaluation -->
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Justice Evaluation</h3>
+                            <p class="text-gray-600 mt-1">Applies ethical frameworks to evaluate decision fairness.</p>
+                        </div>
+                        <!-- Equity Analysis -->
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Equity Analysis</h3>
+                            <p class="text-gray-600 mt-1">Identifies and addresses systemic inequities in distribution.</p>
+                        </div>
+                        <!-- Impact Assessment -->
+                        <div class="border-l-4 border-yellow-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Impact Assessment</h3>
+                            <p class="text-gray-600 mt-1">Quantifies the impact of allocation decisions on communities.</p>
+                        </div>
+                        <!-- Transparency Engine -->
+                        <div class="border-l-4 border-indigo-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Transparency Engine</h3>
+                            <p class="text-gray-600 mt-1">Generates clear, understandable explanations for all decisions.</p>
+                        </div>
+                        <!-- Bias Detection -->
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Bias Detection</h3>
+                            <p class="text-gray-600 mt-1">Identifies potential systemic biases in decision-making.</p>
+                        </div>
+                        <!-- Policy Analysis -->
+                        <div class="border-l-4 border-pink-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Policy Analysis</h3>
+                            <p class="text-gray-600 mt-1">Evaluates policies for compliance, effectiveness, and ethics.</p>
+                        </div>
+                        <!-- Stakeholder Mediation -->
+                        <div class="border-l-4 border-orange-400 pl-4">
+                            <h3 class="text-xl font-bold text-gray-800">Stakeholder Mediation</h3>
+                            <p class="text-gray-600 mt-1">Facilitates conflict resolution and consensus building.</p>
+                        </div>
                     </div>
-                    <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-700">Agent Name</div>
-                        <div class="text-lg font-bold text-blue-600">{{ health.agent_name }}</div>
-                    </div>
                 </div>
             </div>
 
-            <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <span class="text-3xl">⚡</span>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-700">Response Time</div>
-                        <div class="text-lg font-bold text-purple-600">{{ health.response_time|floatformat:2 }}s</div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Agent Address -->
-        <div class="mt-6 bg-gray-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-gray-700 mb-2">Agent Address</div>
-            <div class="font-mono text-sm bg-white border border-gray-300 rounded px-3 py-2">
-                {{ health.address }}
-            </div>
-        </div>
-
-        <!-- Modules Loaded -->
-        {% if health.modules_loaded %}
-        <div class="mt-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">🧩 Loaded Modules</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {% for module in health.modules_loaded %}
-                <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
-                    <div class="text-sm font-medium text-purple-900">{{ module }}</div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        {% else %}
-        <!-- Error State -->
-        <div class="mt-6 bg-red-50 border-2 border-red-200 rounded-lg p-6">
-            <div class="flex items-center">
-                <span class="text-3xl mr-4">❌</span>
-                <div>
-                    <div class="text-xl font-bold text-red-900">Agent Unavailable</div>
-                    <div class="text-red-700 mt-1">{{ health.message }}</div>
-                </div>
-            </div>
-            <div class="mt-4 text-sm text-red-600">
-                <p class="font-medium">Troubleshooting steps:</p>
-                <ul class="list-disc list-inside mt-2 space-y-1">
-                    <li>Ensure the agent is running: <code class="bg-red-100 px-2 py-1 rounded">python main_agent.py</code></li>
-                    <li>Check AGENT_ADDRESS and AGENT_ENDPOINT in your .env file</li>
-                    <li>Verify the agent port (default: 8000) is not blocked</li>
-                </ul>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- Agent Capabilities -->
-    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">🎯 Agent Capabilities</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Fairness Analysis -->
-            <div class="border-2 border-purple-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">⚖️</span>
-                    <h3 class="text-xl font-bold text-gray-800">Fairness Analysis</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Evaluates allocation fairness using distributive justice principles and equity metrics.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Gini coefficient calculation</li>
-                    <li>Proportionality assessment</li>
-                    <li>Resource distribution analysis</li>
-                </ul>
-            </div>
-
-            <!-- Decision Justice -->
-            <div class="border-2 border-blue-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">⚖️</span>
-                    <h3 class="text-xl font-bold text-gray-800">Justice Evaluation</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Applies ethical frameworks to evaluate decision fairness and legitimacy.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Utilitarian analysis</li>
-                    <li>Rawlsian justice principles</li>
-                    <li>Rights-based evaluation</li>
-                </ul>
-            </div>
-
-            <!-- Equity Analysis -->
-            <div class="border-2 border-green-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">📊</span>
-                    <h3 class="text-xl font-bold text-gray-800">Equity Analysis</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Identifies and addresses systemic inequities in resource distribution.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Vulnerability assessment</li>
-                    <li>Historical context analysis</li>
-                    <li>Corrective recommendations</li>
-                </ul>
-            </div>
-
-            <!-- Impact Assessment -->
-            <div class="border-2 border-yellow-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">💥</span>
-                    <h3 class="text-xl font-bold text-gray-800">Impact Assessment</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Quantifies and qualifies the impact of allocation decisions on communities.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Direct beneficiary estimates</li>
-                    <li>Long-term effect modeling</li>
-                    <li>Spillover impact analysis</li>
-                </ul>
-            </div>
-
-            <!-- Transparency Engine -->
-            <div class="border-2 border-indigo-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">🔍</span>
-                    <h3 class="text-xl font-bold text-gray-800">Transparency Engine</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Generates clear, understandable explanations for all decisions.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Plain language explanations</li>
-                    <li>Decision traceability</li>
-                    <li>Audit trail generation</li>
-                </ul>
-            </div>
-
-            <!-- Bias Detection -->
-            <div class="border-2 border-red-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">🔎</span>
-                    <h3 class="text-xl font-bold text-gray-800">Bias Detection</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Identifies and flags potential systemic biases in decision-making processes.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Pattern recognition</li>
-                    <li>Historical bias analysis</li>
-                    <li>Fairness constraint checking</li>
-                </ul>
-            </div>
-
-            <!-- Policy Analysis -->
-            <div class="border-2 border-pink-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">📋</span>
-                    <h3 class="text-xl font-bold text-gray-800">Policy Analysis</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Evaluates policies for compliance, effectiveness, and ethical soundness.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Regulatory compliance</li>
-                    <li>Policy effectiveness metrics</li>
-                    <li>Stakeholder impact analysis</li>
-                </ul>
-            </div>
-
-            <!-- Stakeholder Mediation -->
-            <div class="border-2 border-orange-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                <div class="flex items-center mb-4">
-                    <span class="text-4xl mr-3">🤝</span>
-                    <h3 class="text-xl font-bold text-gray-800">Stakeholder Mediation</h3>
-                </div>
-                <p class="text-gray-600 mb-3">
-                    Facilitates conflict resolution and consensus building among stakeholders.
-                </p>
-                <ul class="text-sm text-gray-700 list-disc list-inside space-y-1">
-                    <li>Interest mapping</li>
-                    <li>Compromise identification</li>
-                    <li>Win-win scenario generation</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">⚡ Quick Actions</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{% url 'funding:index' %}" class="block bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg p-6 hover:shadow-lg transition-shadow text-center">
-                <div class="text-3xl mb-2">💰</div>
-                <div class="font-semibold">Funding Dashboard</div>
-                <div class="text-sm text-purple-100 mt-1">Calculate allocations</div>
-            </a>
-
-            <button 
-                onclick="window.location.reload()"
-                class="bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-lg p-6 hover:shadow-lg transition-shadow text-center"
-            >
-                <div class="text-3xl mb-2">🔄</div>
-                <div class="font-semibold">Refresh Status</div>
-                <div class="text-sm text-green-100 mt-1">Update agent info</div>
-            </button>
-
-            <a href="{% url 'funding:about' %}" class="block bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-6 hover:shadow-lg transition-shadow text-center">
-                <div class="text-3xl mb-2">📚</div>
-                <div class="font-semibold">About System</div>
-                <div class="text-sm text-blue-100 mt-1">Learn more</div>
-            </a>
-        </div>
     </div>
 </div>
 
 <script>
-// Auto-refresh agent status
+// This script can be used for more advanced interactivity if needed in the future.
 document.addEventListener('htmx:afterSwap', function(event) {
+    // Example: log when the agent health check content is swapped
     if (event.detail.target.closest('[hx-get*="agent_health"]')) {
-        console.log('Agent status updated');
+        console.log('Agent status updated via HTMX.');
     }
 });
 </script>

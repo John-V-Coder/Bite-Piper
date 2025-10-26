@@ -1,0 +1,36 @@
+{% extends 'funding/base.html' %}
+
+{% block title %}Welcome to BITE-PIPER{% endblock %}
+
+{% block content %}
+<div class="fade-in text-center">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-2xl p-12 mb-12">
+        <h1 class="text-5xl font-bold mb-3">Welcome to BITE-PIPER</h1>
+        <p class="text-purple-100 text-xl">
+            A Civic Decision-Making AI-Powered System
+        </p>
+    </div>
+
+    <!-- Shortcuts -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+        <!-- Funding Dashboard Shortcut -->
+        <a href="{% url 'funding:index' %}" class="block bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl hover:scale-105 transform transition-all duration-300 ease-in-out">
+            <div class="text-6xl mb-4"></div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Funding Dashboard</h2>
+            <p class="text-gray-600">
+                Analyze regional needs, calculate priority scores, and allocate budgets with our advanced tools.
+            </p>
+        </a>
+
+        <!-- AI Agent Dashboard Shortcut -->
+        <a href="{% url 'funding:agent_dashboard' %}" class="block bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl hover:scale-105 transform transition-all duration-300 ease-in-out">
+            <div class="text-6xl mb-4">🤖</div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">AI Agent Dashboard</h2>
+            <p class="text-gray-600">
+                Monitor the AI agent's status, view its capabilities, and interact with its decision-making core.
+            </p>
+        </a>
+    </div>
+</div>
+{% endblock %}

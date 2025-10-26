@@ -5,7 +5,7 @@
          data-budget="{{ budget }}" 
          data-total-allocated="{{ total_allocated }}" 
          data-budget-utilization="{{ budget_utilization }}">
-        <h2 class="text-2xl font-bold mb-6">📊 Budget Summary</h2>
+        <h2 class="text-2xl font-bold mb-6">Budget Summary</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
                 <p class="text-sm opacity-90 mb-1">Total Budget</p>
@@ -28,7 +28,7 @@
 
     <!-- Priority Analysis -->
     <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Priority Analysis</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6"> Priority Analysis</h2>
         <div class="space-y-4">
             {% for priority in priorities %}
             <div class="border-l-4 {% if priority.priority == 'CRITICAL' %}border-red-500{% elif priority.priority == 'HIGH' %}border-orange-500{% elif priority.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
@@ -74,7 +74,7 @@
 
     <!-- Funding Allocation -->
     <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">💰 Funding Allocation</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6"> Funding Allocation</h2>
         <div class="space-y-4">
             {% for region, details in allocations.items %}
             <div class="border-l-4 {% if details.priority == 'CRITICAL' %}border-red-500{% elif details.priority == 'HIGH' %}border-orange-500{% elif details.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
@@ -119,7 +119,7 @@
 
     <!-- Export Options -->
     <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">📥 Export Results</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Export Results</h2>
         <p class="text-gray-600 mb-4">Download allocation results for reporting and analysis</p>
         <div class="flex space-x-4">
             <button onclick="exportToJSON()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">

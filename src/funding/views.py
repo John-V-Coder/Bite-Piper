@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+import json
 import sys
 from pathlib import Path
 
@@ -15,6 +16,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from application import BitePiperApp
 from advanced_scoring import calculate_advanced_priority_score, explain_priority_decision
 from .agent_client import get_agent_client
+
+
+def home(request):
+    """The main home page with shortcuts."""
+    return render(request, 'funding/home.html', {
+        'title': 'Welcome to BITE-PIPER'
+    })
 
 
 def index(request):
@@ -250,16 +258,16 @@ def about(request):
 # ============================================================================
 
 @require_http_methods(["GET"])
-def agent_health(request):
+async def agent_health(request):
     """Check agent health status (API endpoint)"""
     client = get_agent_client()
-    health_data = client.health_check()
+    health_data = await client.health_check()
     
     return JsonResponse(health_data)
 
 
 @require_http_methods(["POST"])
-def agent_analyze_allocation(request):
+async def agent_analyze_allocation(request):
     """
     Send allocation decision to agent for analysis (HTMX endpoint)
     Returns HTML partial with agent insights
@@ -296,11 +304,12 @@ def agent_analyze_allocation(request):
         
         # Send to agent for analysis
         client = get_agent_client()
-        agent_results = client.batch_analyze_allocations(allocations, region_priorities, budget)
+        agent_results = await client.batch_analyze_allocations(allocations, region_priorities, budget)
         
         # Prepare context with agent insights
         context = {
             'agent_results': agent_results,
+            'agent_results_json': json.dumps(agent_results),
             'allocations': allocations,
             'priorities': region_priorities,
             'budget': budget
@@ -315,7 +324,7 @@ def agent_analyze_allocation(request):
 
 
 @require_http_methods(["POST"])
-def agent_analyze_single(request, region_name):
+async def agent_analyze_single(request, region_name):
     """
     Analyze a single region allocation with agent (API endpoint)
     """
@@ -338,7 +347,7 @@ def agent_analyze_single(request, region_name):
         
         # Send to agent
         client = get_agent_client()
-        result = client.analyze_decision(decision_data)
+        result = await client.analyze_decision(decision_data)
         
         return JsonResponse(result)
     
@@ -350,13 +359,13 @@ def agent_analyze_single(request, region_name):
 
 
 @require_http_methods(["GET"])
-def agent_dashboard(request):
+async def agent_dashboard(request):
     """
     Agent status dashboard page
     Shows agent capabilities and status
     """
     client = get_agent_client()
-    health_data = client.health_check()
+    health_data = await client.health_check()
     
     return render(request, 'funding/agent_dashboard.html', {
         'title': 'AI Agent Dashboard',

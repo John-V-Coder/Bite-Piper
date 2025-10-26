@@ -9,7 +9,8 @@ app_name = 'funding'
 
 urlpatterns = [
     # Main pages
-    path('', views.index, name='index'),
+    path('', views.home, name='home'),
+    path('dashboard/', views.index, name='index'),
     path('about/', views.about, name='about'),
     path('agent/', views.agent_dashboard, name='agent_dashboard'),
     

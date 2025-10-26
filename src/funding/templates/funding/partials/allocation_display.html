@@ -16,7 +16,7 @@
         <div class="border-l-4 {% if details.priority == 'CRITICAL' %}border-red-500{% elif details.priority == 'HIGH' %}border-orange-500{% elif details.priority == 'MEDIUM' %}border-yellow-500{% else %}border-green-500{% endif %} bg-gray-50 p-6 rounded-lg hover:shadow-md transition-shadow">
             <div class="flex justify-between items-start mb-4">
                 <h3 class="text-xl font-semibold text-gray-800">
-                    {% if details.priority == 'CRITICAL' %}🔴{% elif details.priority == 'HIGH' %}🟠{% elif details.priority == 'MEDIUM' %}🟡{% else %}🟢{% endif %}
+                    {% if details.priority == 'CRITICAL' %}{% elif details.priority == 'HIGH' %}{% elif details.priority == 'MEDIUM' %}{% else %}{% endif %}
                     {{ region }}
                 </h3>
                 <span class="px-4 py-1 rounded-full text-sm font-semibold text-white {% if details.priority == 'CRITICAL' %}bg-red-500{% elif details.priority == 'HIGH' %}bg-orange-500{% elif details.priority == 'MEDIUM' %}bg-yellow-500{% else %}bg-green-500{% endif %}">
@@ -62,10 +62,10 @@
         </div>
         <div class="flex space-x-4">
             <button onclick="exportToJSON()" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
-                📄 Export as JSON
+                Export as JSON
             </button>
             <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                🖨️ Print Report
+                Print Report
             </button>
         </div>
     </div>

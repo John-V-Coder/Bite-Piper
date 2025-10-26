@@ -4,159 +4,148 @@
 <div class="fade-in">
     <!-- Header -->
     <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">
-            💰 Funding Allocation Dashboard
-        </h1>
-        <p class="text-gray-600 text-lg">
-            Automated, transparent funding allocation based on socio-economic indicators using Minimal MeTTa
-        </p>
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">Funding Allocation Dashboard</h1>
+        <p class="text-gray-600 text-lg">Automated, transparent funding allocation based on socio-economic indicators.</p>
     </div>
 
-    <!-- Budget Input Form -->
-    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">⚙️ Configuration</h2>
-        
-        <form 
-            hx-post="{% url 'funding:calculate' %}" 
-            hx-target="#results"
-            hx-indicator="#loading"
-            class="space-y-4"
-        >
-            {% csrf_token %}
-            <div class="flex items-center space-x-4">
-                <label for="budget" class="text-lg font-medium text-gray-700 min-w-[150px]">
-                    Total Budget ($):
-                </label>
-                <input 
-                    type="number" 
-                    id="budget" 
-                    name="budget" 
-                    value="{{ default_budget }}"
-                    min="100000"
-                    step="100000"
-                    class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
-                    required
-                >
-                <button 
-                    type="submit" 
-                    class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
-                >
-                    🚀 Calculate Allocation
-                </button>
-            </div>
+    <!-- Main Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column: Configuration & Info -->
+        <div class="lg:col-span-1 space-y-8">
             
-            <!-- Advanced Scoring Toggle -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div class="flex items-center space-x-3">
-                    <input 
-                        type="checkbox" 
-                        id="use_advanced" 
-                        name="use_advanced" 
-                        value="true"
-                        checked
-                        class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                    >
-                    <label for="use_advanced" class="text-sm font-medium text-gray-700 cursor-pointer">
-                        <span class="text-purple-600">🧠 Advanced Scoring Mode</span> - 
-                        Uses sophisticated multi-indicator analysis with urgency factors, consistency checks, and severity assessments
-                    </label>
+            <!-- Configuration Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">Configuration</h2>
+                <form 
+                    hx-post="{% url 'funding:calculate' %}" 
+                    hx-target="#results-container"
+                    hx-indicator="#loading-indicator"
+                    hx-trigger="submit, keyup changed delay:500ms from:#budget"
+                >
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <div>
+                            <label for="budget" class="text-lg font-medium text-gray-700">Total Budget ($)</label>
+                            <input 
+                                type="number" 
+                                id="budget" 
+                                name="budget" 
+                                value="{{ default_budget }}"
+                                min="100000"
+                                step="100000"
+                                class="mt-2 w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-start space-x-3">
+                                <input 
+                                    type="checkbox" 
+                                    id="use_advanced" 
+                                    name="use_advanced" 
+                                    value="true"
+                                    checked
+                                    class="w-5 h-5 mt-1 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                                >
+                                <label for="use_advanced" class="text-sm font-medium text-gray-700 cursor-pointer">
+                                    <span class="text-purple-600 font-bold">Advanced Scoring Mode</span>
+                                    <p class="text-xs text-gray-600">Uses multi-indicator analysis with urgency, consistency, and severity checks.</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            class="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                        >
+                            🚀 Calculate Allocation
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- How It Works Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">How It Works</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">1. Analyze Indicators</h3>
+                        <p class="text-sm text-gray-600">Combines multiple socio-economic factors to assess need.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">2. Prioritize Regions</h3>
+                        <p class="text-sm text-gray-600">Assigns a priority level (Critical, High, Medium, Low) based on the analysis.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">3. Allocate Budget</h3>
+                        <p class="text-sm text-gray-600">Distributes the total budget according to weighted priority levels.</p>
+                    </div>
                 </div>
             </div>
-        </form>
 
-        <!-- Loading Indicator -->
-        <div id="loading" class="htmx-indicator mt-6">
-            <div class="flex items-center justify-center space-x-3 text-purple-600">
+        </div>
+
+        <!-- Right Column: Results -->
+        <div class="lg:col-span-2">
+            <div 
+                id="results-container"
+                hx-post="{% url 'funding:calculate' %}"
+                hx-trigger="load"
+                hx-indicator="#loading-indicator"
+                class="bg-white rounded-lg shadow-lg p-6 min-h-full"
+            >
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="htmx-indicator">
+                    <div class="flex flex-col items-center justify-center h-full py-20">
+                        <svg class="animate-spin h-12 w-12 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span class="mt-4 text-lg font-medium text-gray-600">Analyzing data and calculating allocations...</span>
+                    </div>
+                </div>
+                <!-- Results will be loaded here by HTMX -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Agent Analysis Section -->
+    <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                    <span class="mr-3"></span>
+                    AI Agent Analysis
+                </h2>
+                <p class="text-gray-600 mt-1">
+                    Get a comprehensive ethical, fairness, and transparency analysis from the AI agent.
+                </p>
+            </div>
+            <button
+                hx-post="{% url 'funding:agent_analyze' %}"
+                hx-include="[name='budget'], [name='use_advanced']"
+                hx-target="#agent-results-container"
+                hx-swap="innerHTML"
+                hx-indicator="#agent-loading-indicator"
+                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center"
+            >
+                <span class="mr-2"></span>
+                Analyze with AI Agent
+            </button>
+        </div>
+        <div id="agent-loading-indicator" class="htmx-indicator mt-4">
+            <div class="flex items-center justify-center py-6 space-x-3 text-purple-600">
                 <svg class="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <span class="text-lg font-medium">Analyzing data and calculating allocations...</span>
+                <span class="text-lg font-medium">Sending to AI Agent for comprehensive analysis...</span>
             </div>
         </div>
-
-        <!-- AI Agent Analysis Button -->
-        <div class="mt-6 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center">
-                        <span class="mr-2">🤖</span>
-                        AI Agent Analysis
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-1">
-                        Get comprehensive ethical, fairness, and transparency analysis powered by ASI
-                    </p>
-                </div>
-                <button
-                    hx-post="{% url 'funding:agent_analyze' %}"
-                    hx-include="[name='budget'], [name='use_advanced']"
-                    hx-target="#agent-results"
-                    hx-indicator="#agent-loading"
-                    class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center"
-                >
-                    <span class="mr-2">🧠</span>
-                    Analyze with AI Agent
-                </button>
-            </div>
-            
-            <!-- Agent Loading Indicator -->
-            <div id="agent-loading" class="htmx-indicator mt-4">
-                <div class="flex items-center justify-center space-x-3 text-purple-600">
-                    <svg class="animate-spin h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span class="font-medium">Sending to AI Agent for comprehensive analysis...</span>
-                </div>
-            </div>
-        </div>
+        <div id="agent-results-container" class="mt-4"></div>
     </div>
-
-    <!-- How It Works -->
-    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">📚 How It Works</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-purple-50 p-6 rounded-lg">
-                <div class="text-3xl mb-3">1️⃣</div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-3">Analyze</h3>
-                <ul class="text-gray-600 space-y-2">
-                    <li>• Poverty Rate (25%)</li>
-                    <li>• Income (15%)</li>
-                    <li>• Wealth Index (20%)</li>
-                    <li>• PPI Score (15%)</li>
-                    <li>• Consumption (10%)</li>
-                    <li>• Literacy (15%)</li>
-                </ul>
-            </div>
-            
-            <div class="bg-blue-50 p-6 rounded-lg">
-                <div class="text-3xl mb-3">2️⃣</div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-3">Prioritize</h3>
-                <ul class="text-gray-600 space-y-2">
-                    <li>🔴 CRITICAL (≥0.70)</li>
-                    <li>🟠 HIGH (≥0.50)</li>
-                    <li>🟡 MEDIUM (≥0.30)</li>
-                    <li>🟢 LOW (<0.30)</li>
-                </ul>
-            </div>
-            
-            <div class="bg-green-50 p-6 rounded-lg">
-                <div class="text-3xl mb-3">3️⃣</div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-3">Allocate</h3>
-                <ul class="text-gray-600 space-y-2">
-                    <li>• CRITICAL: 40% weight</li>
-                    <li>• HIGH: 30% weight</li>
-                    <li>• MEDIUM: 20% weight</li>
-                    <li>• LOW: 10% weight</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Results Container (HTMX will inject here) -->
-    <div id="results"></div>
-
-    <!-- Agent Analysis Results Container -->
-    <div id="agent-results"></div>
 </div>
 {% endblock %}
