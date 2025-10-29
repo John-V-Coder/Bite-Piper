@@ -68,10 +68,8 @@ def calculate_allocation(request):
                     # Apply advanced scoring logic
                     advanced_result = calculate_advanced_priority_score(indicators)
                     
-                    # Merge advanced results with basic data
-                    priority_data['score'] = advanced_result['display_score']
                     priority_data['priority'] = advanced_result['priority_level']
-                    priority_data['explanation'] = advanced_result['explanation']
+                    priority_data['explanation'] = explain_priority_decision(advanced_result)
                     priority_data['indicator_breakdown'] = advanced_result['indicator_breakdown']
                     priority_data['warnings'] = advanced_result.get('warnings', [])
                     priority_data['urgency'] = advanced_result['urgency']
